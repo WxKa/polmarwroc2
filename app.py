@@ -41,12 +41,13 @@ def get_model():
 @st.cache_data
 def get_full_csv_df(year):
     file_name = f"halfmarathon_wroclaw_{year}__final_cleaned_full.csv"
-    local_path = Path('data') / 'current' / file_name
+    s3_file_name = "zadanie_9/current/" + file_name
+    local_path = file_name
     try:
-        s3.download_file(BUCKET_NAME, f"zadanie_9/current/{file_name}", local_path)
+        s3.download_file(BUCKET_NAME, s3_file_name, local_path)
     except Exception as e:
         st.error(f"Błąd ładowania csv z maratonem: {str(e)}.")
-        raise Exception("Nie znaleziono pliku z maratonem.")
+        raise Exception(f"Błąd ładowania {s3_file_name} do {local_path}")
         pass
     return pd.read_csv(local_path, sep=";")
 
@@ -412,7 +413,10 @@ def place(year):
     df_plus_1.sort_values(by='finish_sec', ascending=True, inplace=True)
     df_plus_1['Miejsce'].interpolate(method='linear', inplace=True)
 
-    html(st, f"<h6>Poniżej to chyba ilość startujących i Twoje miejsce {'(nieprzeliczone)' if sex else ''} </h6>")
+    if sex:
+        df_plus_1['Miejsce'] = df_plus_1['Miejsce'] * df.size / df_all.size
+
+    html(st, "<h6>Poniżej to chyba ilość startujących i Twoje miejsce</h6>")
     df_plus_1[df_plus_1['5_km_sec'].isna()]['Miejsce']
 
 def display_results_page():
