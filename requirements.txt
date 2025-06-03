@@ -1,0 +1,7 @@
+openai
+langfuse
+streamlit
+python-dotenv
+boto3
+pandas
+pycaret
