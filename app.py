@@ -399,7 +399,7 @@ def place(year):
     else:
         df = df_all
     sns.scatterplot(data=df, x="finish_sec", y="age", ax=ax, color="lightgray", linewidth=0, alpha=0.5, label="Inni, pozostali")
-    label = f"To Ty, {'ten najważniejszy' if runner.sex == 'M' else 'ta najważniejsza'}"
+    label = f"To Ty,🙂 {'ten' if runner.sex == 'M' else 'ta'} najważniejsz{'y' if runner.sex == 'M' else 'a'} 🙂"
     sns.scatterplot(data=df_1, x="finish_sec", y="age", ax=ax, color="red", linewidth=0, alpha=0.8, label=label)
     ax.set_title("Czasy wg wieku")
     ax.legend()
